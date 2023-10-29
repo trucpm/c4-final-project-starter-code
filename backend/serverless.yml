@@ -179,7 +179,12 @@ resources:
     AttachmentsBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: ${self:provider.environment.ATTACHMENT_S3_BUCKET}                                                                     
+        BucketName: ${self:provider.environment.ATTACHMENT_S3_BUCKET}    
+        PublicAccessBlockConfiguration: 
+          BlockPublicAcls: false
+        OwnershipControls:
+          Rules:
+            - ObjectOwnership: ObjectWriter                                                                   
         CorsConfiguration:
           CorsRules:
             - AllowedOrigins:
@@ -203,10 +208,12 @@ resources:
           Id: serverlessBucketPolicy                       
           Version: '2012-10-17'                          
           Statement:
-            - Principal: '*'
+            - Sid: PublicReadForGetBucketObjects
+              Principal: '*'
               Effect: Allow            
               Action:
                 - 's3:GetObject'              
                 - 's3:PutObject'                            
               Resource: 'arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*'                           
-        Bucket: !Ref AttachmentsBucket
+        Bucket: 
+          Ref: AttachmentsBucket
