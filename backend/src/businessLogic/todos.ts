@@ -67,3 +67,8 @@ export async function createAttachmentPresignedUrl(todoId:string, userId:string)
     await attachmentUtils.updateAttachmentUrl(todoId, userId, url);
     return getUploadUrl(imageId);
 } 
+
+export async function deleteAttachmentPresignedUrl(todoId:string, userId:string) {
+    logger.info('Delete attachment presigned url ');
+    await attachmentUtils.deleteAttachmentUrl(todoId, userId);
+}

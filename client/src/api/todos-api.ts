@@ -55,6 +55,18 @@ export async function deleteTodo(
   })
 }
 
+export async function deleteTodoImage(
+  idToken: string,
+  todoId: string
+): Promise<void> {
+  await Axios.delete(`${apiEndpoint}/todos/${todoId}/removeattach`, {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${idToken}`
+    }
+  })
+}
+
 export async function getUploadUrl(
   idToken: string,
   todoId: string
