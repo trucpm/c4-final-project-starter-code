@@ -53,6 +53,12 @@ functions:
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
       - Effect: Allow
         Action:
+          - dynamodb:Query
+          - dynamodb:Scan
+          - dynamodb:GetItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/*
+      - Effect: Allow
+        Action:
           - xray:PutTelemetryRecords
           - xray:PutTraceSegments
         Resource: '*'
@@ -103,6 +109,10 @@ functions:
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}                       
       - Effect: Allow
         Action:
+          - dynamodb:UpdateItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/*     
+      - Effect: Allow
+        Action:
           - xray:PutTelemetryRecords
           - xray:PutTraceSegments
         Resource: '*'
@@ -142,7 +152,15 @@ functions:
           - s3:PutObject
           - s3:GetObject
           - '*'
-        Resource: !GetAtt AttachmentsBucket.Arn            
+        Resource: !GetAtt AttachmentsBucket.Arn  
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}                       
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/*             
       - Effect: Allow
         Action:
           - xray:PutTelemetryRecords
