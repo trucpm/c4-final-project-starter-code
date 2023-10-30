@@ -14,7 +14,7 @@ import {
   Loader
 } from 'semantic-ui-react'
 
-import { createTodo, deleteTodo, getTodos, patchTodo } from '../api/todos-api'
+import { createTodo, deleteTodo, deleteTodoImage, getTodos, patchTodo } from '../api/todos-api'
 import Auth from '../auth/Auth'
 import { Todo } from '../types/Todo'
 
@@ -68,6 +68,20 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
       })
     } catch {
       alert('Todo deletion failed')
+    }
+  }
+
+  onTodoDeleteImage = async (todoId: string) => {
+    try {
+      await deleteTodoImage(this.props.auth.getIdToken(), todoId)
+      let todoIndex = this.state.todos.findIndex((todo => todo.todoId === todoId));
+      this.setState({
+        todos: update(this.state.todos, {
+          [todoIndex]: { attachmentUrl: { $set: "" } }
+        })
+      })
+    } catch {
+      alert('Todo image deletion failed')
     }
   }
 
@@ -193,7 +207,10 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
                 </Button>
               </Grid.Column>
               {todo.attachmentUrl && (
-                <Image src={todo.attachmentUrl} size="small" wrapped />
+                <div>
+                  <Image src={todo.attachmentUrl} size="small" wrapped />
+                  <Icon onClick={() => this.onTodoDeleteImage(todo.todoId)} style={{color: "red", fontSize: '25px', cursor: 'pointer', marginLeft: '15px'}} name="delete" />
+                </div>
               )}
               <Grid.Column width={16}>
                 <Divider />

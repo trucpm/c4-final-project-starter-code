@@ -29,6 +29,22 @@ export class AttachmentUtils {
         return url;
     }
 
+    async deleteAttachmentUrl(todoId: string, userId: string) {
+      logger.info('Remove Attachment URL: ');
+      await this.docClient.update({
+        TableName: this.todosTable,
+        Key: {
+          todoId: todoId,
+          userId: userId
+        },
+        UpdateExpression: "set attachmentUrl = :url",
+        ExpressionAttributeValues: {
+          ":url": "",
+        }
+      }).promise();
+      
+    }
+
 }
 
 function createDynamoDBClient() {
